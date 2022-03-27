@@ -3,13 +3,15 @@ package com.ahdan.githubuser2.View
 import android.content.res.Configuration
 import android.os.Bundle
 import android.util.Log
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.annotation.IdRes
 import androidx.appcompat.widget.SearchView
+import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
-import androidx.navigation.fragment.NavHostFragment
+import androidx.navigation.NavController
+import androidx.navigation.NavDirections
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -19,8 +21,7 @@ import com.ahdan.githubuser2.Model.ItemsItem
 import com.ahdan.githubuser2.R
 import com.ahdan.githubuser2.ViewModel.MainViewModel
 import com.ahdan.githubuser2.databinding.FragmentHomeBinding
-import java.util.Arrays
-import kotlin.collections.ArrayList
+import java.util.*
 
 class HomeFragment : Fragment() {
     private var _binding: FragmentHomeBinding? = null
@@ -48,9 +49,7 @@ class HomeFragment : Fragment() {
         rvUser.setHasFixedSize(true)
         showUserList(list)
 
-//        val searchManager = getSystemService(requireContext(), SEARCH_SERVICE) as SearchManager
         val searchView = binding.searchUser
-//        searchView.setSearchableInfo(searchManager.getSearchableInfo(componentName))
         searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
             override fun onQueryTextSubmit(query: String?): Boolean = false
             override fun onQueryTextChange(newText: String?): Boolean {
@@ -88,31 +87,41 @@ class HomeFragment : Fragment() {
         rvUser.adapter = adapter
         adapter.setOnItemClickCallback(object: SearchAdapter.OnItemClickCallback{
             override fun onItemClicked(data: ItemsItem) {
-                Log.d("Button","Clicked")
                 setSelectedUser(data)
             }
         })
     }
 
-    private fun setSelectedUser(data: ItemsItem){
-        val toDetailFragment = HomeFragmentDirections.actionHomeFragmentToDetailFragment()
-        toDetailFragment.login = data.login
-//        val currentDestinationIsHome = this.findNavController().currentDestination == this.findNavController().findDestination(R.id.homeFragment)
-//        val currentDestinationIsDetail = this.findNavController().currentDestination == this.findNavController().findDestination(R.id.detailFragment)
+    companion object {
+        val USER_NAME = "user_name"
+    }
 
-//        if(currentDestinationIsHome && !currentDestinationIsDetail){
-//            this.findNavController().navigate(toDetailFragment)
-//        }
-//        else{
-//            Log.d("0",this.findNavController().currentDestination.toString())
-//            Log.d("1",this.findNavController().findDestination(R.id.homeFragment).toString())
-//            Log.d("2",this.findNavController().findDestination(R.id.detailFragment).toString())
-//        }
-        NavHostFragment.findNavController(this).navigate(toDetailFragment)
-        Log.d("Navigation", "Harusnya sudah dinavigasi")
+    private fun setSelectedUser(data: ItemsItem){
+        val mBundle = Bundle()
+        mBundle.putString(USER_NAME, data.login)
+        findNavController().safeNavigate(R.id.homeFragment, R.id.action_homeFragment_to_detailFragment, mBundle)
     }
 
     private fun showLoading(isLoading: Boolean) {
         binding.progressBar.visibility = if (isLoading) View.VISIBLE else View.GONE
+    }
+
+    fun NavController.safeNavigate(direction: NavDirections) {
+        currentDestination?.getAction(direction.actionId)?.run { navigate(direction) }
+    }
+
+    fun NavController.safeNavigate(
+        @IdRes currentDestinationId: Int,
+        @IdRes id: Int,
+        args: Bundle? = null
+    ) {
+        if (currentDestinationId == currentDestination?.id) {
+            navigate(id, args)
+        }
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        _binding = null
     }
 }

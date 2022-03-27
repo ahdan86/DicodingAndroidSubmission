@@ -2,22 +2,18 @@ package com.ahdan.githubuser2.View
 
 import android.os.Bundle
 import android.util.Log
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.annotation.StringRes
+import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
-import androidx.viewpager2.widget.ViewPager2
-import com.ahdan.githubuser2.Model.Adapter.SectionsPagerAdapter
 import com.ahdan.githubuser2.Model.UserDetailResponse
 import com.ahdan.githubuser2.R
 import com.ahdan.githubuser2.ViewModel.DetailViewModel
 import com.ahdan.githubuser2.databinding.FragmentDetailBinding
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
-import com.google.android.material.tabs.TabLayout
-import com.google.android.material.tabs.TabLayoutMediator
 
 class DetailFragment : Fragment() {
     companion object {
@@ -44,8 +40,10 @@ class DetailFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        val userLogin = DetailFragmentArgs.fromBundle(arguments as Bundle).login
-        viewModel.setDetailUser(userLogin)
+        val dataUserName = arguments?.getString(HomeFragment.USER_NAME)
+        if (dataUserName != null) {
+            viewModel.setDetailUser(dataUserName)
+        }
 
 //        val sectionsPagerAdapter = context?.let {
 //            SectionsPagerAdapter(it as AppCompatActivity)
@@ -86,5 +84,10 @@ class DetailFragment : Fragment() {
 
     private fun showLoading(isLoading: Boolean) {
         binding.progressBar.visibility = if (isLoading) View.VISIBLE else View.GONE
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        _binding = null
     }
 }

@@ -1,7 +1,9 @@
 package com.ahdan.githubuser2.Model.Adapter
 
+import android.os.SystemClock
 import android.util.Log
 import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.ahdan.githubuser2.Model.ItemsItem
@@ -34,7 +36,7 @@ class SearchAdapter(private val listSearchUser: ArrayList<ItemsItem>): RecyclerV
         holder.binding.tvUserName.text = data.login
         holder.binding.tvId.text = data.id.toString()
         holder.binding.tvType.text = data.type
-        holder.itemView.setOnClickListener {
+        holder.itemView.blockingClickListener {
             onItemClickCallback.onItemClicked(listSearchUser[holder.adapterPosition])
         }
     }
@@ -43,5 +45,31 @@ class SearchAdapter(private val listSearchUser: ArrayList<ItemsItem>): RecyclerV
 
     interface OnItemClickCallback {
         fun onItemClicked(data: ItemsItem)
+    }
+
+    private val clickTag = "__click__"
+    fun View.blockingClickListener(debounceTime: Long = 1200L, action: () -> Unit) {
+        this.setOnClickListener(object : View.OnClickListener {
+            private var lastClickTime: Long = 0
+            override fun onClick(v: View) {
+                val timeNow = SystemClock.elapsedRealtime()
+                val elapsedTimeSinceLastClick = timeNow - lastClickTime
+                Log.d(clickTag, """
+                        DebounceTime: $debounceTime
+                        Time Elapsed: $elapsedTimeSinceLastClick
+                        Is within debounce time: ${elapsedTimeSinceLastClick < debounceTime}
+                    """.trimIndent())
+
+                if (elapsedTimeSinceLastClick < debounceTime) {
+                    Log.d(clickTag, "Double click shielded")
+                    return
+                }
+                else {
+                    Log.d(clickTag, "Click happened")
+                    action()
+                }
+                lastClickTime = SystemClock.elapsedRealtime()
+            }
+        })
     }
 }
