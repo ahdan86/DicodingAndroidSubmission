@@ -2,13 +2,13 @@ package com.ahdan.githubuser2.Model
 
 import com.google.gson.annotations.SerializedName
 
-data class FollowingRepsonse(
+data class FollowingResponse(
 
-	@field:SerializedName("FollowingRepsonse")
-	val followingRepsonse: List<FollowingRepsonseItem>
+	@field:SerializedName("FollowingResponse")
+	val followingResponse: List<FollowingResponseItem>
 )
 
-data class FollowingRepsonseItem(
+data class FollowingResponseItem(
 
 	@field:SerializedName("gists_url")
 	val gistsUrl: String,

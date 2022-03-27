@@ -9,14 +9,17 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.appcompat.widget.SearchView
 import androidx.fragment.app.viewModels
+import androidx.navigation.fragment.NavHostFragment
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.ahdan.githubuser2.Model.Adapter.SearchAdapter
 import com.ahdan.githubuser2.Model.ItemsItem
+import com.ahdan.githubuser2.R
 import com.ahdan.githubuser2.ViewModel.MainViewModel
 import com.ahdan.githubuser2.databinding.FragmentHomeBinding
-import java.util.*
+import java.util.Arrays
 import kotlin.collections.ArrayList
 
 class HomeFragment : Fragment() {
@@ -32,7 +35,7 @@ class HomeFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        _binding = FragmentHomeBinding.inflate(layoutInflater, container, false)
+        _binding = FragmentHomeBinding.inflate(inflater, container, false)
         return binding.root
     }
 
@@ -73,7 +76,7 @@ class HomeFragment : Fragment() {
     }
 
     private fun showUserList(userData: ArrayList<ItemsItem>){
-        Log.d("MainActivity_Recycler",  Arrays.toString(userData.toArray()))
+        Log.d("HomeFragment_Recycler",  Arrays.toString(userData.toArray()))
         if (requireContext().resources.configuration.orientation == Configuration.ORIENTATION_LANDSCAPE) {
             rvUser.layoutManager = GridLayoutManager(requireContext(), 2)
         }
@@ -81,9 +84,32 @@ class HomeFragment : Fragment() {
             rvUser.layoutManager = LinearLayoutManager(requireContext())
         }
         val adapter = SearchAdapter(userData)
-        Log.d("MainActivity_Recycler",  adapter.itemCount.toString())
-//        if(adapter.itemCount == 0)
+        Log.d("HomeFragment_Recycler",  adapter.itemCount.toString())
         rvUser.adapter = adapter
+        adapter.setOnItemClickCallback(object: SearchAdapter.OnItemClickCallback{
+            override fun onItemClicked(data: ItemsItem) {
+                Log.d("Button","Clicked")
+                setSelectedUser(data)
+            }
+        })
+    }
+
+    private fun setSelectedUser(data: ItemsItem){
+        val toDetailFragment = HomeFragmentDirections.actionHomeFragmentToDetailFragment()
+        toDetailFragment.login = data.login
+//        val currentDestinationIsHome = this.findNavController().currentDestination == this.findNavController().findDestination(R.id.homeFragment)
+//        val currentDestinationIsDetail = this.findNavController().currentDestination == this.findNavController().findDestination(R.id.detailFragment)
+
+//        if(currentDestinationIsHome && !currentDestinationIsDetail){
+//            this.findNavController().navigate(toDetailFragment)
+//        }
+//        else{
+//            Log.d("0",this.findNavController().currentDestination.toString())
+//            Log.d("1",this.findNavController().findDestination(R.id.homeFragment).toString())
+//            Log.d("2",this.findNavController().findDestination(R.id.detailFragment).toString())
+//        }
+        NavHostFragment.findNavController(this).navigate(toDetailFragment)
+        Log.d("Navigation", "Harusnya sudah dinavigasi")
     }
 
     private fun showLoading(isLoading: Boolean) {
