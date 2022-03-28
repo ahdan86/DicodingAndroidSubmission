@@ -1,4 +1,4 @@
-package com.ahdan.githubuser2.View
+package com.ahdan.githubuser2.view
 
 import android.os.Bundle
 import android.util.Log
@@ -6,14 +6,19 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.annotation.StringRes
+import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
-import com.ahdan.githubuser2.Model.UserDetailResponse
+import androidx.viewpager2.widget.ViewPager2
+import com.ahdan.githubuser2.model.UserDetailResponse
 import com.ahdan.githubuser2.R
-import com.ahdan.githubuser2.ViewModel.DetailViewModel
+import com.ahdan.githubuser2.viewModel.DetailViewModel
 import com.ahdan.githubuser2.databinding.FragmentDetailBinding
+import com.ahdan.githubuser2.model.adapter.SectionsPagerAdapter
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
+import com.google.android.material.tabs.TabLayout
+import com.google.android.material.tabs.TabLayoutMediator
 
 class DetailFragment : Fragment() {
     companion object {
@@ -29,6 +34,8 @@ class DetailFragment : Fragment() {
 
     private val viewModel: DetailViewModel by viewModels()
 
+    private var dataLogin: String? = null
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -40,20 +47,24 @@ class DetailFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        val dataUserName = arguments?.getString(HomeFragment.USER_NAME)
-        if (dataUserName != null) {
-            viewModel.setDetailUser(dataUserName)
+        dataLogin= arguments?.getString(HomeFragment.USER_NAME)
+        if (dataLogin != null) {
+            viewModel.setDetailUser(dataLogin!!)
         }
 
-//        val sectionsPagerAdapter = context?.let {
-//            SectionsPagerAdapter(it as AppCompatActivity)
-//        }
-//        val viewPager: ViewPager2 = binding.viewPager
-//        viewPager.adapter = sectionsPagerAdapter
-//        val tabs: TabLayout = binding.tabs
-//        TabLayoutMediator(tabs, viewPager) { tab, position ->
-//            tab.text = resources.getString(TAB_TITLES[position])
-//        }.attach()
+        val sectionsPagerAdapter = context?.let {
+            SectionsPagerAdapter(it as AppCompatActivity)
+        }
+        dataLogin?.let {
+            sectionsPagerAdapter?.setLogin(it)
+        }
+
+        val viewPager: ViewPager2 = binding.viewPager
+        viewPager.adapter = sectionsPagerAdapter
+        val tabs: TabLayout = binding.tabs
+        TabLayoutMediator(tabs, viewPager) { tab, position ->
+            tab.text = resources.getString(TAB_TITLES[position])
+        }.attach()
 
         viewModel.user.observe(viewLifecycleOwner){
             showDetailUser(it)
@@ -77,8 +88,18 @@ class DetailFragment : Fragment() {
             idFollower.text = resources.getString(R.string.detil_follower, userDetail.followers)
             idFollowing.text =resources.getString(R.string.detil_following, userDetail.following)
             idRepo.text = resources.getString(R.string.detil_repository, userDetail.publicRepos)
-            idCompany.text = userDetail.company
-            idLocation.text = userDetail.location
+            if(userDetail.company != null) {
+                idCompany.text = userDetail.company
+            }
+            else {
+                idCompany.text = resources.getString(R.string.not_found)
+            }
+            if(userDetail.location != null) {
+                idLocation.text = userDetail.location
+            }
+            else {
+                idLocation.text = resources.getString(R.string.not_found)
+            }
         }
     }
 

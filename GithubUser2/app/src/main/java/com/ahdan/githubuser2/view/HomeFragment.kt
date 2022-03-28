@@ -1,4 +1,4 @@
-package com.ahdan.githubuser2.View
+package com.ahdan.githubuser2.view
 
 import android.content.res.Configuration
 import android.os.Bundle
@@ -11,15 +11,14 @@ import androidx.appcompat.widget.SearchView
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.NavController
-import androidx.navigation.NavDirections
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.ahdan.githubuser2.Model.Adapter.SearchAdapter
-import com.ahdan.githubuser2.Model.ItemsItem
+import com.ahdan.githubuser2.model.adapter.SearchAdapter
+import com.ahdan.githubuser2.model.ItemsItem
 import com.ahdan.githubuser2.R
-import com.ahdan.githubuser2.ViewModel.MainViewModel
+import com.ahdan.githubuser2.viewModel.MainViewModel
 import com.ahdan.githubuser2.databinding.FragmentHomeBinding
 import java.util.*
 
@@ -93,7 +92,7 @@ class HomeFragment : Fragment() {
     }
 
     companion object {
-        val USER_NAME = "user_name"
+        const val USER_NAME = "user_name"
     }
 
     private fun setSelectedUser(data: ItemsItem){
@@ -106,11 +105,7 @@ class HomeFragment : Fragment() {
         binding.progressBar.visibility = if (isLoading) View.VISIBLE else View.GONE
     }
 
-    fun NavController.safeNavigate(direction: NavDirections) {
-        currentDestination?.getAction(direction.actionId)?.run { navigate(direction) }
-    }
-
-    fun NavController.safeNavigate(
+    private fun NavController.safeNavigate(
         @IdRes currentDestinationId: Int,
         @IdRes id: Int,
         args: Bundle? = null

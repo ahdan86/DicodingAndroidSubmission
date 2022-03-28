@@ -1,4 +1,4 @@
-package com.ahdan.githubuser2.View
+package com.ahdan.githubuser2.view
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle

@@ -14,6 +14,7 @@
     <string name="detil_following">"%d Following"</string>
     <string name="detil_repository">"%d Repository"</string>
     <string name="detil_company">Company</string>
+    <string name="not_found">Not Found</string>
     <string name="detil_location">Location</string>
     <string name="githublogo">GithubLogo</string>
     <string name="search_hint">Search Github Users</string>

@@ -11,10 +11,10 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.GithubUser2">
         <activity
-            android:name=".View.MenuActivity"
+            android:name=".view.MenuActivity"
             android:exported="false" />
         <activity
-            android:name=".View.MainActivity"
+            android:name=".view.MainActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
