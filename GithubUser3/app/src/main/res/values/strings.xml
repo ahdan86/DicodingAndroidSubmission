@@ -1,0 +1,32 @@
+<resources>
+    <string name="app_name">GithubUser2</string>
+    <string name="menu_setting">settings</string>
+    <string name="setting">Ini Menu Setting (belum ada)</string>
+    <string name="menu_search">Search</string>
+
+    <string name="id_name">Id User</string>
+    <string name="users_name">Username User</string>
+    <string name="users_type">Tipe User</string>
+    <string name="profile_picture">Profile Picture</string>
+    <string name="profilename">ProfileName</string>
+    <string name="detil_id">id</string>
+    <string name="detil_follower">"%d Follower"</string>
+    <string name="detil_following">"%d Following"</string>
+    <string name="detil_repository">"%d Repository"</string>
+    <string name="detil_company">Company</string>
+    <string name="not_found">Not Found</string>
+    <string name="detil_location">Location</string>
+    <string name="githublogo">GithubLogo</string>
+    <string name="search_hint">Search Github Users</string>
+    <string name="helloWorld">testText</string>
+    <string name="tab_text_1">Follower</string>
+    <string name="tab_text_2">Following</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="tab_following_er">Tab Following/er</string>
+    <string name="dark_mode">Dark Mode</string>
+    <string name="addlogoAdd">addLogoAdd</string>
+    <string name="favorites">favorites</string>
+    <string name="addlogoRemove">addLogoRemove</string>
+    <string name="insert">Insert Berhasil</string>
+</resources>
