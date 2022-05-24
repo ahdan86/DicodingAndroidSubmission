@@ -21,6 +21,7 @@ import com.example.storyapp.ViewModelFactory
 import com.example.storyapp.databinding.ActivityMainBinding
 import com.example.storyapp.model.ListStoryItem
 import com.example.storyapp.model.UserPreference
+import com.example.storyapp.view.maps.MapsActivity
 import com.example.storyapp.view.upload.UploadActivity
 import com.example.storyapp.view.welcome.WelcomeActivity
 
@@ -111,6 +112,10 @@ class MainActivity: AppCompatActivity() {
         binding.uploadButton.setOnClickListener{
             val intent = Intent(this, UploadActivity::class.java)
             intent.putExtra("token", token)
+            startActivity(intent)
+        }
+        binding.fabMaps.setOnClickListener{
+            val intent = Intent(this, MapsActivity::class.java)
             startActivity(intent)
         }
     }
