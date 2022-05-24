@@ -1,0 +1,23 @@
+<resources>
+    <string name="app_name">StoryApp</string>
+    <string name="title_welcome_page">Selamat datang di aplikasi StoryApp</string>
+    <string name="message_welcome_page">Silahkan melakukan login atau registrasi</string>
+    <string name="login">Login</string>
+    <string name="signup">Register</string>
+    <string name="copyright">© Ahdan App</string>
+    <string name="logout">Logout</string>
+    <string name="message_main_page">Ini adalah main page</string>
+    <string name="name">Nama</string>
+    <string name="title_signup_page">Silahkan isi data diri:</string>
+    <string name="email">Email</string>
+    <string name="password">Password</string>
+    <string name="title_login_page">Silahkan login</string>
+    <string name="user_name">User_Name</string>
+    <string name="user_photo">Photo si user</string>
+    <string name="upload">Upload</string>
+    <string name="desc">desc</string>
+    <string name="camera_x">Camera X</string>
+    <string name="camera">Camera</string>
+    <string name="gallery">Gallery</string>
+    <string name="register">Register</string>
+</resources>
