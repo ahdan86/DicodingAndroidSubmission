@@ -28,6 +28,7 @@ interface ApiService {
     @GET("stories")
     fun getStories(
         @Header("Authorization") token : String,
+        @Query("location") location: Int
     ): Call<StoriesResponse>
 
     @Multipart

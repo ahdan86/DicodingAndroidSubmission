@@ -3,7 +3,9 @@
   <component name="DesignSurface">
     <option name="filePathToZoomLevelMap">
       <map>
+        <entry key="..\:/FileKuliah/Bangkit/FileProject/git/DicodingAndroidSubmission/StoryApp_2/app/src/main/res/drawable/ic_baseline_lock_24.xml" value="0.1365" />
         <entry key="..\:/FileKuliah/Bangkit/FileProject/git/DicodingAndroidSubmission/StoryApp_2/app/src/main/res/layout/activity_main.xml" value="0.22" />
+        <entry key="..\:/FileKuliah/Bangkit/FileProject/git/DicodingAndroidSubmission/StoryApp_2/app/src/main/res/layout/activity_register.xml" value="0.286231884057971" />
       </map>
     </option>
   </component>

@@ -116,6 +116,7 @@ class MainActivity: AppCompatActivity() {
         }
         binding.fabMaps.setOnClickListener{
             val intent = Intent(this, MapsActivity::class.java)
+            intent.putExtra("token", token)
             startActivity(intent)
         }
     }

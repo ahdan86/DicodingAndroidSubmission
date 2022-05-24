@@ -21,7 +21,7 @@ class MainViewModel(private val pref: UserPreference): ViewModel() {
     fun getListStories(token: String){
         _isLoading.value = true
         val bearerToken = "Bearer $token"
-        val client = ApiConfig.getApiService().getStories(bearerToken)
+        val client = ApiConfig.getApiService().getStories(bearerToken, 0)
         client.enqueue(object: retrofit2.Callback<StoriesResponse>{
             override fun onResponse(
                 call: Call<StoriesResponse>,

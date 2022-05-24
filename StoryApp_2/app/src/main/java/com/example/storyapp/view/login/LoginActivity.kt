@@ -18,6 +18,7 @@ import com.example.storyapp.ViewModelFactory
 import com.example.storyapp.databinding.ActivityLoginBinding
 import com.example.storyapp.view.main.MainActivity
 import com.example.storyapp.model.UserPreference
+import com.example.storyapp.view.welcome.WelcomeActivity
 
 private val Context.dataStore: DataStore<Preferences> by preferencesDataStore(name = "settings")
 
