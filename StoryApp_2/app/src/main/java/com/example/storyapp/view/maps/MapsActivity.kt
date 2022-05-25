@@ -2,21 +2,26 @@ package com.example.storyapp.view.maps
 
 import android.Manifest
 import android.content.pm.PackageManager
+import android.content.res.Resources
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
+import android.view.View
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.activity.viewModels
 import androidx.core.content.ContextCompat
-import androidx.lifecycle.Observer
 import com.example.storyapp.R
 import com.example.storyapp.databinding.ActivityMapsBinding
+import com.example.storyapp.databinding.MapsPopoutBinding
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.OnMapReadyCallback
 import com.google.android.gms.maps.SupportMapFragment
 import com.google.android.gms.maps.model.LatLng
+import com.google.android.gms.maps.model.MapStyleOptions
+import com.google.android.gms.maps.model.Marker
 import com.google.android.gms.maps.model.MarkerOptions
+import com.squareup.picasso.Picasso
 
 class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
 
@@ -69,14 +74,48 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
             mMap.clear()
             it.forEach {
                 val latLng = it.lat?.let { it1 -> it.lon?.let { it2 -> LatLng(it1, it2) } }
-                latLng?.let { it1 -> MarkerOptions().position(it1).title(it.name) }
+                latLng?.let { it1 -> MarkerOptions().position(it1).title(it.name).snippet(it.description) }
                     ?.let { it2 -> mMap.addMarker(it2) }
-                latLng?.let { it1 -> CameraUpdateFactory.newLatLng(it1) }
+                latLng?.let { it1 -> CameraUpdateFactory.newLatLngZoom(it1, 14f) }
                     ?.let { it2 -> mMap.moveCamera(it2) }
+                customInfoWindowAdapter(it.photoUrl)
             }
         }
 
         getMyLocation()
+        setMapStyle()
+    }
+
+    private fun customInfoWindowAdapter(photoUrl: String?) {
+        mMap.setInfoWindowAdapter(object : GoogleMap.InfoWindowAdapter {
+            private val binding: MapsPopoutBinding = MapsPopoutBinding.inflate(layoutInflater)
+            override fun getInfoContents(p0: Marker): View? {
+                return null
+            }
+
+            override fun getInfoWindow(p0: Marker): View {
+                binding.name.text = p0.title
+                binding.desc.text = p0.snippet
+                Picasso.get()
+                    .load(photoUrl)
+                    .error(R.mipmap.ic_launcher) // will be displayed if the image cannot be loaded
+                    .into(binding.image)
+                return binding.root
+            }
+
+        })
+    }
+
+    private fun setMapStyle() {
+        try {
+            val success =
+                mMap.setMapStyle(MapStyleOptions.loadRawResourceStyle(this, R.raw.map_style))
+            if (!success) {
+                Log.e(TAG, "Style parsing failed.")
+            }
+        } catch (exception: Resources.NotFoundException) {
+            Log.e(TAG, "Can't find style. Error: ", exception)
+        }
     }
 
     private val requestPermissionLauncher =
@@ -98,5 +137,9 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
         } else {
             requestPermissionLauncher.launch(Manifest.permission.ACCESS_FINE_LOCATION)
         }
+    }
+
+    companion object {
+        private const val TAG = "MapsActivity"
     }
 }
