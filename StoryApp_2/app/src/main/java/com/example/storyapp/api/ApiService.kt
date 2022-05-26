@@ -1,12 +1,10 @@
 package com.example.storyapp.api
 
-import com.example.storyapp.model.LoginResponse
-import com.example.storyapp.model.RegisterResponse
-import com.example.storyapp.model.StoriesResponse
-import com.example.storyapp.model.UploadResponse
+import com.example.storyapp.model.*
 import okhttp3.MultipartBody
 import okhttp3.RequestBody
 import retrofit2.Call
+import retrofit2.Response
 import retrofit2.http.*
 
 interface ApiService {
@@ -26,8 +24,15 @@ interface ApiService {
     ): Call<LoginResponse>
 
     @GET("stories")
-    fun getStories(
-        @Header("Authorization") token : String,
+    suspend fun getStories(
+        @Header("Authorization") token: String,
+        @Query("page") page: Int?,
+        @Query("size") size: Int?
+    ): Response<StoriesResponse>
+
+    @GET("stories")
+    fun getMapStories(
+        @Header("Authorization") token: String,
         @Query("location") location: Int
     ): Call<StoriesResponse>
 

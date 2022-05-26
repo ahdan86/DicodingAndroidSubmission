@@ -5,21 +5,18 @@ import android.content.Intent
 import android.content.res.Configuration
 import android.os.Build
 import android.os.Bundle
-import android.util.Log
-import android.view.View
 import android.view.WindowInsets
 import android.view.WindowManager
+import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.datastore.core.DataStore
 import androidx.datastore.preferences.core.Preferences
 import androidx.datastore.preferences.preferencesDataStore
-import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.storyapp.ViewModelFactory
 import com.example.storyapp.databinding.ActivityMainBinding
-import com.example.storyapp.model.ListStoryItem
 import com.example.storyapp.model.UserPreference
 import com.example.storyapp.view.maps.MapsActivity
 import com.example.storyapp.view.upload.UploadActivity
@@ -29,10 +26,12 @@ private val Context.dataStore: DataStore<Preferences> by preferencesDataStore(na
 
 class MainActivity: AppCompatActivity() {
     private lateinit var binding: ActivityMainBinding
-    private lateinit var mainViewModel: MainViewModel
+    private val mainViewModel: MainViewModel by viewModels{
+        ViewModelFactory(this, UserPreference.getInstance(dataStore))
+    }
 
     private lateinit var rvStories: RecyclerView
-    private val list = ArrayList<ListStoryItem>()
+//    private val list = ArrayList<ListStoryItem>()
 
     private lateinit var token: String
 
@@ -47,32 +46,41 @@ class MainActivity: AppCompatActivity() {
 
         rvStories = binding.rvStories
         rvStories.setHasFixedSize(true)
-        showStoriesList(list)
+        showStoriesList()
 
-        mainViewModel.listPhoto.observe(this){
-            showStoriesList(it)
-        }
+//        mainViewModel.listPhoto.observe(this){
+//            showStoriesList(it)
+//        }
 
-        showLoading(true)
-        mainViewModel.isLoading.observe(this) {
-            showLoading(it)
-        }
+//        showLoading(true)
+//        mainViewModel.isLoading.observe(this) {
+//            showLoading(it)
+//        }
     }
 
-    private fun showLoading(it: Boolean?) {
-        binding.progressBar.visibility = if (it == true) View.VISIBLE else View.GONE
-    }
+//    private fun showLoading(it: Boolean?) {
+//        binding.progressBar.visibility = if (it == true) View.VISIBLE else View.GONE
+//    }
 
-    private fun showStoriesList(list: List<ListStoryItem>) {
+    private fun showStoriesList() {
         if (this.resources.configuration.orientation == Configuration.ORIENTATION_LANDSCAPE) {
             rvStories.layoutManager = GridLayoutManager(this, 2)
         }
         else{
             rvStories.layoutManager = LinearLayoutManager(this)
         }
-        val adapter = MainAdapter(list)
-        Log.d("MainActivity_Recycler",  adapter.itemCount.toString())
-        rvStories.adapter = adapter
+        val adapter = StoriesAdapter()
+        rvStories.adapter = adapter.withLoadStateFooter(
+            footer = LoadingStateAdapter {
+                adapter.retry()
+            }
+        )
+
+        mainViewModel.getUser().observe(this) { user ->
+            mainViewModel.stories(user.token).observe(this) {
+                adapter.submitData(lifecycle, it)
+            }
+        }
     }
 
     private fun setupView() {
@@ -89,10 +97,10 @@ class MainActivity: AppCompatActivity() {
     }
 
     private fun setupViewModel() {
-        mainViewModel = ViewModelProvider(
-            this,
-            ViewModelFactory(UserPreference.getInstance(dataStore))
-        )[MainViewModel::class.java]
+//        mainViewModel = ViewModelProvider(
+//            this,
+//            ViewModelFactory(UserPreference.getInstance(dataStore))
+//        )[MainViewModel::class.java]
         mainViewModel.getUser().observe(this) { user ->
             if (!user.isLogin) {
                 startActivity(Intent(this, WelcomeActivity::class.java))
@@ -100,7 +108,6 @@ class MainActivity: AppCompatActivity() {
             }
             else{
                 token = user.token
-                mainViewModel.getListStories(token)
             }
         }
     }

@@ -1,7 +1,6 @@
 package com.example.storyapp.view.maps
 
 import android.util.Log
-import android.widget.Toast
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -15,7 +14,7 @@ class MapsViewModel(): ViewModel() {
 
     fun getListStories(token: String){
         val bearerToken = "Bearer $token"
-        val client = ApiConfig.getApiService().getStories(bearerToken, 1)
+        val client = ApiConfig.getApiService().getMapStories(bearerToken, 1)
         client.enqueue(object: retrofit2.Callback<StoriesResponse>{
             override fun onResponse(
                 call: retrofit2.Call<StoriesResponse>,

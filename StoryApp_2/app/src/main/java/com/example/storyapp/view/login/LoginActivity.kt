@@ -8,6 +8,7 @@ import android.view.View
 import android.view.WindowInsets
 import android.view.WindowManager
 import android.widget.Toast
+import androidx.activity.viewModels
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.datastore.core.DataStore
@@ -24,7 +25,12 @@ private val Context.dataStore: DataStore<Preferences> by preferencesDataStore(na
 
 class LoginActivity: AppCompatActivity() {
     private lateinit var binding: ActivityLoginBinding
-    private lateinit var loginViewModel: LoginViewModel
+    private val loginViewModel: LoginViewModel by viewModels{
+        ViewModelFactory(
+            application,
+            UserPreference.getInstance(dataStore)
+        )
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -32,7 +38,6 @@ class LoginActivity: AppCompatActivity() {
         setContentView(binding.root)
 
         setupView()
-        setupviewModel()
         setupAction()
 
         showLoading(false)
@@ -56,13 +61,6 @@ class LoginActivity: AppCompatActivity() {
             )
         }
         supportActionBar?.hide()
-    }
-
-    private fun setupviewModel() {
-        loginViewModel = ViewModelProvider(
-            this,
-            ViewModelFactory(UserPreference.getInstance(dataStore))
-        )[LoginViewModel::class.java]
     }
 
     private fun setupAction(){
