@@ -31,7 +31,6 @@ class MainActivity: AppCompatActivity() {
     }
 
     private lateinit var rvStories: RecyclerView
-//    private val list = ArrayList<ListStoryItem>()
 
     private lateinit var token: String
 
@@ -47,20 +46,7 @@ class MainActivity: AppCompatActivity() {
         rvStories = binding.rvStories
         rvStories.setHasFixedSize(true)
         showStoriesList()
-
-//        mainViewModel.listPhoto.observe(this){
-//            showStoriesList(it)
-//        }
-
-//        showLoading(true)
-//        mainViewModel.isLoading.observe(this) {
-//            showLoading(it)
-//        }
     }
-
-//    private fun showLoading(it: Boolean?) {
-//        binding.progressBar.visibility = if (it == true) View.VISIBLE else View.GONE
-//    }
 
     private fun showStoriesList() {
         if (this.resources.configuration.orientation == Configuration.ORIENTATION_LANDSCAPE) {

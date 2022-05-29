@@ -15,8 +15,8 @@ class LoginViewModel(private val pref: UserPreference): ViewModel() {
         private const val TAG = "LoginViewModel"
     }
 
-    private val _loginSuccess = MutableLiveData<Boolean>()
-    val loginSuccess: LiveData<Boolean> = _loginSuccess
+    private val _loginSuccess = MutableLiveData<Boolean?>()
+    val loginSuccess: MutableLiveData<Boolean?> = _loginSuccess
 
     private val _isLoading = MutableLiveData<Boolean>()
     val isLoading: LiveData<Boolean> = _isLoading
@@ -52,6 +52,7 @@ class LoginViewModel(private val pref: UserPreference): ViewModel() {
                 _isLoading.value = false
             }
         })
+        _loginSuccess.value = null
     }
 
     fun login(id: String, token: String) {

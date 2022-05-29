@@ -2,6 +2,8 @@ package com.example.storyapp.view.register
 
 import android.util.Log
 import android.widget.Toast
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.storyapp.api.ApiConfig
@@ -18,7 +20,8 @@ class RegisterViewModel() : ViewModel() {
         private const val TAG = "RegisterViewModel"
     }
 
-    private var registerSuccess: Boolean = false
+    private val _registerSuccess = MutableLiveData<Boolean>()
+    val registerSuccess: LiveData<Boolean> = _registerSuccess
 
     fun postUser(name: String, email: String, password: String) {
         val client = ApiConfig.getApiService().getUsers(name, email, password)
@@ -32,10 +35,11 @@ class RegisterViewModel() : ViewModel() {
                     if(data != null){
                         if(data.error == false){
                             Log.d(TAG, "Success onResponse: ${data.message}")
-                            registerSuccess = true
+                            _registerSuccess.value = true
                         }
                         else{
                             Log.e(TAG, "ERROR CREATING USER: ${data.message}")
+                            _registerSuccess.value = false
                         }
                     }
                 }
@@ -43,11 +47,8 @@ class RegisterViewModel() : ViewModel() {
 
             override fun onFailure(call: Call<RegisterResponse>, t: Throwable) {
                 Log.e(TAG, "onFailure: ${t.message.toString()}")
+                _registerSuccess.value = false
             }
         })
-    }
-
-    fun getRegisterSuccess(): Boolean {
-        return registerSuccess
     }
 }

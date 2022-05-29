@@ -84,11 +84,11 @@ class LoginActivity: AppCompatActivity() {
                     loginViewModel.postLogin(email, password)
 
                     loginViewModel.loginSuccess.observe(this){
-                        if(it) {
+                        if(it == true) {
                             startActivity(Intent(this, MainActivity::class.java))
                             finish()
                         }
-                        else if(!it){
+                        else if(it == false){
                             AlertDialog.Builder(this).apply {
                                 setTitle("Oops!")
                                 setMessage("Email/Password Salah.")

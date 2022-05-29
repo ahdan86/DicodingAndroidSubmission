@@ -65,26 +65,27 @@ class RegisterActivity: AppCompatActivity() {
                 }
                 else -> {
                     registerViewModel.postUser(name, email, password)
-                    if(registerViewModel.getRegisterSuccess()) {
-                        AlertDialog.Builder(this).apply {
-                            setTitle("Yeah!")
-                            setMessage("Akunnya sudah dibuat.")
-                            setPositiveButton("Lanjut") { _, _ ->
-                                finish()
+                    registerViewModel.registerSuccess.observe(this ){
+                        if (it) {
+                            AlertDialog.Builder(this).apply {
+                                setTitle("Yeah!")
+                                setMessage("Akunnya sudah dibuat.")
+                                setPositiveButton("Lanjut") { _, _ ->
+                                    finish()
+                                }
+                                create()
+                                show()
                             }
-                            create()
-                            show()
-                        }
-                    }
-                    else{
-                        AlertDialog.Builder(this).apply {
-                            setTitle("Oops!")
-                            setMessage("Akunnya gagal dibuat.")
-                            setPositiveButton("Coba lagi") { _, _ ->
-                                // do nothing
+                        } else {
+                            AlertDialog.Builder(this).apply {
+                                setTitle("Oops!")
+                                setMessage("Akunnya gagal dibuat.")
+                                setPositiveButton("Coba lagi") { _, _ ->
+                                    // do nothing
+                                }
+                                create()
+                                show()
                             }
-                            create()
-                            show()
                         }
                     }
                 }
